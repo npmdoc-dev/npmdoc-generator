@@ -1,0 +1,7 @@
+node_modules
+key.json
+key.json.enc
+.cirrus.yml
+src/
+test/
+coverage/
