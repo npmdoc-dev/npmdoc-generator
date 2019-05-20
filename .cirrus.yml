@@ -34,4 +34,4 @@ publish_task:
     - npm run compile
     - openssl enc -aes-256-cbc -d -in key.json.enc -out key.json -k $KEYFILE_SECRET
     - gcloud auth activate-service-account --key-file=key.json
-    - gcloud app deploy --project npmdocs
+    - gcloud app deploy --project npmdoc
