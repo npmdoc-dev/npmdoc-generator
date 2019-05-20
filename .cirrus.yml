@@ -1,5 +1,5 @@
 container:
-  image: node:10-alpine
+  image: node:10
 
 lint_task:
   install_script: npm install
