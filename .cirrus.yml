@@ -10,6 +10,8 @@ test_task:
   test_script: npm test
 
 coverage_task:
+  environment:
+    CODECOV_TOKEN: ENCRYPTED[633903f875972b57ff48fdef4d018f3e7f93168986b5a29e8b9b7fd554149eb2947ccd3def16f608db1a8b0fd36c7588]
   script:
     - npm install
     - npm test
