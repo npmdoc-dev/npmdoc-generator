@@ -1,5 +1,5 @@
 container:
-  image: node:10-alpine
+  image: node:10
 
 lint_task:
   install_script: npm install
@@ -8,3 +8,29 @@ lint_task:
 test_task:
   install_script: npm install
   test_script: npm test
+
+coverage_task:
+  environment:
+    CODECOV_TOKEN: ENCRYPTED[633903f875972b57ff48fdef4d018f3e7f93168986b5a29e8b9b7fd554149eb2947ccd3def16f608db1a8b0fd36c7588]
+  script:
+    - npm install
+    - npm test
+    - npm run codecov
+
+publish_task:
+  container:
+    image: google/cloud-sdk:latest
+  only_if: $CIRRUS_BRANCH == 'master'
+  depends_on:
+    - test
+    - lint
+  environment:
+    KEYFILE_SECRET: ENCRYPTED[9c13216624beaec5f6e7641b2c8ae94e58435ac12b082b1ecc5d8bc4a24c4b2355151e76b2a18b2648c7135c9072d295]
+  script:
+    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+    - nvm install 10
+    - npm install
+    - npm run compile
+    - openssl enc -aes-256-cbc -d -in key.json.enc -out key.json -k $KEYFILE_SECRET
+    - gcloud auth activate-service-account --key-file=key.json
+    - gcloud app deploy
