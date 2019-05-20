@@ -18,6 +18,8 @@ coverage_task:
     - npm run codecov
 
 publish_task:
+  container:
+    image: google/cloud-sdk:latest
   only_if: $CIRRUS_BRANCH == 'master'
   depends_on:
     - test
@@ -25,9 +27,10 @@ publish_task:
   environment:
     KEYFILE_SECRET: ENCRYPTED[9c13216624beaec5f6e7641b2c8ae94e58435ac12b082b1ecc5d8bc4a24c4b2355151e76b2a18b2648c7135c9072d295]
   script:
+    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+    - nvm install 10
     - npm install
     - npm run compile
     - openssl enc -aes-256-cbc -d -in key.json.enc -out key.json -k $KEYFILE_SECRET
     - gcloud auth activate-service-account --key-file=key.json
-    - gcloud builds submit . -t gcr.io/npmdoc/generator
-    - gcloud beta run deploy npmdoc-generator --image gcr.io/npmdoc/generator --region us-central1
+    - gcloud app deploy
