@@ -28,6 +28,7 @@ publish_task:
     KEYFILE_SECRET: ENCRYPTED[9c13216624beaec5f6e7641b2c8ae94e58435ac12b082b1ecc5d8bc4a24c4b2355151e76b2a18b2648c7135c9072d295]
   script:
     - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+    - export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     - nvm install 10
     - npm install
     - npm run compile
